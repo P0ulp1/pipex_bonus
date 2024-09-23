@@ -6,7 +6,7 @@
 /*   By: phautena <phautena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 12:14:11 by phautena          #+#    #+#             */
-/*   Updated: 2024/09/16 15:04:43 by phautena         ###   ########.fr       */
+/*   Updated: 2024/09/23 13:21:07 by phautena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	init_structure(t_pipex *pipex, int argc)
 	pipex->infile = -1;
 	pipex->outfile = -1;
 	pipex->splitted_path = NULL;
-	pipex->pipes = NULL;
 }
 
 int	init_files(t_pipex *pipex, char *argv[], int argc)
@@ -52,6 +51,10 @@ void	ft_free(t_pipex *pipex)
 {
 	if (pipex->splitted_path != NULL)
 		ft_free_double_array(pipex->splitted_path);
+	if (pipex->infile != -1)
+		close(pipex->infile);
+	if (pipex->outfile != -1)
+		close(pipex->outfile);
 }
 
 void	ft_free_double_array(char	**array)

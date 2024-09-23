@@ -6,7 +6,7 @@
 /*   By: phautena <phautena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 12:10:45 by phautena          #+#    #+#             */
-/*   Updated: 2024/09/16 18:09:09 by phautena         ###   ########.fr       */
+/*   Updated: 2024/09/23 13:59:49 by phautena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,17 @@ typedef struct s_pipex
 	int		process_n;
 	int		infile;
 	int		outfile;
-	int		**pipes;
 	char	**splitted_path;
 }	t_pipex;
 
 ////main.c////
-int		create_pipes(t_pipex *pipex);
-int		create_process(t_pipex *pipex, char *argv[], char *envp[]);
-int		build_and_exec(t_pipex *pipex, char *binary, char *envp[], int iterator);
-void	close_pipes_children(t_pipex *pipex, int iterator);
-void	close_all_pipes(t_pipex *pipex);
+
 ////pipex_build.c////
 char	**build_command(t_pipex *pipex, char *binary, char *envp[]);
 char	*get_binary_path(t_pipex *pipex, char *binary);
-
+int		exec_children(t_pipex *pipex, char *binary, char *envp[]);
+int		exec_all(t_pipex *pipex, char *argv[], char *envp[]);
+int		exec_children_bis(t_pipex *pipex, pid_t pid, int pipefd[2], char **command, char *envp[]);
 ////pipex_utils.c////
 void	init_structure(t_pipex *pipex, int argc);
 int		init_files(t_pipex *pipex, char *argv[], int argc);

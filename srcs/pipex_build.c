@@ -6,7 +6,7 @@
 /*   By: phautena <phautena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/06 12:27:56 by phautena          #+#    #+#             */
-/*   Updated: 2024/09/23 14:32:25 by phautena         ###   ########.fr       */
+/*   Updated: 2024/09/23 14:37:24 by phautena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	**build_command(t_pipex *pipex, char *binary, char *envp[])
 	command = ft_split(binary, ' ');
 	if (command == NULL)
 		return (NULL);
-	if (command[0][0] == '/')
+	if (command[0][0] == '/' || pipex->envp == NULL)
 	{
 		if (access(command[0], X_OK) == 0)
 			return (command);

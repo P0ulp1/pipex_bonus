@@ -6,7 +6,7 @@
 /*   By: phautena <phautena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 12:14:11 by phautena          #+#    #+#             */
-/*   Updated: 2024/09/23 14:04:48 by phautena         ###   ########.fr       */
+/*   Updated: 2024/09/23 14:37:32 by phautena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,20 @@
 
 void	init_structure(t_pipex *pipex, int argc, char *envp[])
 {
+	int	i;
+
 	pipex->process_n = argc - 3;
 	pipex->infile = -1;
 	pipex->outfile = -1;
 	pipex->splitted_path = NULL;
 	pipex->envp = envp;
+	i = 0;
+	while (envp[i] != NULL)
+		i++;
+	if (i > 6)
+		pipex->envp = envp;
+	else
+		pipex->envp = NULL;
 }
 
 int	init_files(t_pipex *pipex, char *argv[], int argc)

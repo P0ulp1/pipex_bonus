@@ -6,7 +6,7 @@
 /*   By: phautena <phautena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/06 12:27:56 by phautena          #+#    #+#             */
-/*   Updated: 2024/09/23 13:59:41 by phautena         ###   ########.fr       */
+/*   Updated: 2024/09/23 14:32:25 by phautena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,7 @@ char	*get_binary_path(t_pipex *pipex, char *binary)
 		if (temp == NULL)
 			return (free(binary), NULL);
 		if (access(temp, X_OK) == 0)
-		{
-			dprintf(2, "VALID Value: %s\n", temp);
 			return (free(binary), temp);
-		}
 		free(temp);
 		i++;
 	}
@@ -64,7 +61,7 @@ char	*get_binary_path(t_pipex *pipex, char *binary)
 	return (NULL);
 }
 
-int	exec_all(t_pipex *pipex, char *argv[], char *envp[])
+int	exec_all(t_pipex *pipex, char *argv[])
 {
 	int		i;
 	char	**command;
@@ -73,29 +70,29 @@ int	exec_all(t_pipex *pipex, char *argv[], char *envp[])
 	dup2(pipex->infile, STDIN_FILENO);
 	while (i < pipex->process_n - 1)
 	{
-		if (exec_children(pipex, argv[i + 2], envp) != 0)
+		if (exec_children(pipex, argv[i + 2]) != 0)
 			break ;
 		i++;
 	}
 	dup2(pipex->outfile, STDOUT_FILENO);
 	close(pipex->infile);
 	close(pipex->outfile);
-	command = build_command(pipex, argv[pipex->process_n + 1], envp);
+	command = build_command(pipex, argv[pipex->process_n + 1], pipex->envp);
 	if (command == NULL)
 		return (2);
-	if (execve(command[0], command, envp) == -1)
+	if (execve(command[0], command, pipex->envp) == -1)
 		return (perror("Executing Command"), 3);
 	free(command);
 	return (0);
 }
 
-int	exec_children(t_pipex *pipex, char *binary, char *envp[])
+int	exec_children(t_pipex *pipex, char *binary)
 {
 	int		pipefd[2];
 	pid_t	pid;
 	char	**command;
 
-	command = build_command(pipex, binary, envp);
+	command = build_command(pipex, binary, pipex->envp);
 	if (command == NULL)
 		return (1);
 	if (pipe(pipefd) == -1)
@@ -103,13 +100,13 @@ int	exec_children(t_pipex *pipex, char *binary, char *envp[])
 	pid = fork();
 	if (pid == -1)
 		return (perror("Fork"), 3);
-	if (exec_children_bis(pipex, pid, pipefd, command, envp) != 0)
+	if (exec_children_bis(pipex, pid, pipefd, command) != 0)
 		return (4);
 	free(command);
 	return (0);
 }
 
-int	exec_children_bis(t_pipex *pipex, pid_t pid, int pipefd[2], char **command, char *envp[])
+int	exec_children_bis(t_pipex *pipex, pid_t pid, int pipefd[2], char **command)
 {
 	if (pid == 0)
 	{
@@ -118,7 +115,7 @@ int	exec_children_bis(t_pipex *pipex, pid_t pid, int pipefd[2], char **command, 
 		close(pipefd[1]);
 		close(pipex->infile);
 		close(pipex->outfile);
-		if (execve(command[0], command, envp) == -1)
+		if (execve(command[0], command, pipex->envp) == -1)
 			return (perror("Command execution"), 1);
 	}
 	else

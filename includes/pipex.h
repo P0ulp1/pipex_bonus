@@ -6,7 +6,7 @@
 /*   By: phautena <phautena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 12:10:45 by phautena          #+#    #+#             */
-/*   Updated: 2024/09/23 13:59:49 by phautena         ###   ########.fr       */
+/*   Updated: 2024/09/23 14:33:31 by phautena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_pipex
 	int		infile;
 	int		outfile;
 	char	**splitted_path;
+	char	**envp;
 }	t_pipex;
 
 ////main.c////
@@ -34,11 +35,11 @@ typedef struct s_pipex
 ////pipex_build.c////
 char	**build_command(t_pipex *pipex, char *binary, char *envp[]);
 char	*get_binary_path(t_pipex *pipex, char *binary);
-int		exec_children(t_pipex *pipex, char *binary, char *envp[]);
-int		exec_all(t_pipex *pipex, char *argv[], char *envp[]);
-int		exec_children_bis(t_pipex *pipex, pid_t pid, int pipefd[2], char **command, char *envp[]);
+int		exec_children(t_pipex *pipex, char *binary);
+int		exec_all(t_pipex *pipex, char *argv[]);
+int		exec_children_bis(t_pipex *pipex, pid_t pid, int pipefd[2], char **command);
 ////pipex_utils.c////
-void	init_structure(t_pipex *pipex, int argc);
+void	init_structure(t_pipex *pipex, int argc, char *envp[]);
 int		init_files(t_pipex *pipex, char *argv[], int argc);
 void	ft_free(t_pipex *pipex);
 void	ft_free_double_array(char	**array);

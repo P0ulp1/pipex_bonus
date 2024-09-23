@@ -6,18 +6,19 @@
 /*   By: phautena <phautena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 12:14:11 by phautena          #+#    #+#             */
-/*   Updated: 2024/09/23 13:21:07 by phautena         ###   ########.fr       */
+/*   Updated: 2024/09/23 14:04:48 by phautena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	init_structure(t_pipex *pipex, int argc)
+void	init_structure(t_pipex *pipex, int argc, char *envp[])
 {
 	pipex->process_n = argc - 3;
 	pipex->infile = -1;
 	pipex->outfile = -1;
 	pipex->splitted_path = NULL;
+	pipex->envp = envp;
 }
 
 int	init_files(t_pipex *pipex, char *argv[], int argc)
